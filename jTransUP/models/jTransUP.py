@@ -114,11 +114,12 @@ class jTransUPModel(nn.Module):
     def paddingItems(self, i_ids, pad_index):
         padded_e_ids = []
         for i_id in i_ids:
+            if torch.is_tensor(i_id):
+                i_id = i_id.item()
             new_index = self.i_map[i_id]
             ent_id = self.new_map[new_index][0]
             padded_e_ids.append(ent_id if ent_id != -1 else pad_index)
         return padded_e_ids
-
     def forward(self, ratings, triples, is_rec=True):
         
         if is_rec and ratings is not None:
